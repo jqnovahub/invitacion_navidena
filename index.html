@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Christmas Invitation Generator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Fuente Google (opcional) -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-gradient: linear-gradient(135deg, #0b1b24, #143f34 40%, #7b1020);
+      --card-bg: rgba(255, 255, 255, 0.12);
+      --card-solid-bg: #ffffff;
+      --accent-red: #e63946;
+      --accent-green: #2a9d8f;
+      --accent-gold: #f4d35e;
+      --text-light: #f9fafb;
+      --text-muted: #e5e7eb;
+      --border-soft: rgba(255, 255, 255, 0.22);
+      --shadow-soft: 0 18px 40px rgba(0, 0, 0, 0.55);
+      --radius-xl: 20px;
+      --transition-fast: 0.2s ease;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "Poppins", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      min-height: 100vh;
+      background: var(--bg-gradient);
+      color: var(--text-light);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+    }
+
+    .app-shell {
+      width: 100%;
+      max-width: 1080px;
+      background: radial-gradient(circle at top left, rgba(255,255,255,0.08), transparent 60%),
+                  radial-gradient(circle at bottom right, rgba(255,255,255,0.08), transparent 60%),
+                  rgba(4, 7, 13, 0.9);
+      border-radius: 28px;
+      padding: 26px 22px 26px 22px;
+      box-shadow: var(--shadow-soft);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(14px);
+    }
+
+    @media (min-width: 900px) {
+      .app-shell {
+        padding: 32px 32px 30px 32px;
+      }
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 22px;
+    }
+
+    .title-block {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .app-title {
+      font-size: 1.4rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .app-title span.emoji {
+      font-size: 1.6rem;
+      filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.35));
+    }
+
+    .app-subtitle {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      max-width: 420px;
+    }
+
+    .badge {
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(244, 211, 94, 0.7);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--accent-gold);
+      background: rgba(17, 24, 39, 0.7);
+    }
+
+    .badge-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: var(--accent-gold);
+      box-shadow: 0 0 8px rgba(244, 211, 94, 0.9);
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr);
+      gap: 18px;
+    }
+
+    @media (min-width: 900px) {
+      .layout {
+        grid-template-columns: minmax(0, 1.05fr) minmax(0, 1.3fr);
+        gap: 24px;
+      }
+    }
+
+    /* Panel izquierdo: formulario */
+    .panel {
+      background: var(--card-bg);
+      border-radius: var(--radius-xl);
+      padding: 18px 18px 18px 18px;
+      border: 1px solid var(--border-soft);
+    }
+
+    @media (min-width: 900px) {
+      .panel {
+        padding: 22px 22px 22px 22px;
+      }
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .panel-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 0, #ffffff, #e63946 45%, #8b1b2c);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.35);
+    }
+
+    .panel-title {
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    .panel-subtitle {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 14px;
+    }
+
+    .form-label {
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
+
+    .helper-text {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 10px 11px;
+      border-radius: 999px;
+      border: 1px solid rgba(209, 213, 219, 0.8);
+      background: rgba(15, 23, 42, 0.9);
+      color: var(--text-light);
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast);
+    }
+
+    .form-input::placeholder {
+      color: #9ca3af;
+    }
+
+    .form-input:focus {
+      border-color: var(--accent-gold);
+      box-shadow: 0 0 0 1px rgba(244, 211, 94, 0.2);
+      background: rgba(15, 23, 42, 1);
+    }
+
+    .error-text {
+      font-size: 0.78rem;
+      color: #fecaca;
+      margin-top: 4px;
+      display: none;
+    }
+
+    .error-text.visible {
+      display: block;
+    }
+
+    .btn {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 9px 18px;
+      border-radius: 999px;
+      border: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: transform var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast), opacity var(--transition-fast);
+      white-space: nowrap;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #e63946, #f4a261);
+      color: #111827;
+      box-shadow: 0 12px 25px rgba(0,0,0,0.4);
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      transform: translateY(-1px);
+      box-shadow: 0 16px 32px rgba(0,0,0,0.5);
+    }
+
+    .btn-primary:active:not(:disabled) {
+      transform: translateY(0);
+      box-shadow: 0 10px 22px rgba(0,0,0,0.45);
+    }
+
+    .btn-primary:disabled {
+      opacity: 0.6;
+      cursor: default;
+      box-shadow: none;
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--accent-gold);
+      border: 1px solid rgba(244, 211, 94, 0.8);
+    }
+
+    .btn-outline:hover:not(:disabled) {
+      background: rgba(17, 24, 39, 0.7);
+    }
+
+    .btn-icon {
+      font-size: 1.1rem;
+    }
+
+    .btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .spinner {
+      width: 15px;
+      height: 15px;
+      border-radius: 999px;
+      border: 2px solid rgba(17, 24, 39, 0.2);
+      border-top-color: rgba(17, 24, 39, 0.9);
+      animation: spin 0.7s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* Evento fijo */
+    .event-info {
+      margin-top: 18px;
+      padding: 12px 12px 12px 12px;
+      border-radius: 16px;
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px dashed rgba(229, 231, 235, 0.55);
+      font-size: 0.8rem;
+      display: grid;
+      gap: 4px;
+    }
+
+    .event-info-title {
+      font-weight: 600;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--accent-gold);
+    }
+
+    .event-info-title span {
+      font-size: 1rem;
+    }
+
+    .event-line {
+      display: flex;
+      gap: 6px;
+    }
+
+    .event-label {
+      width: 70px;
+      opacity: 0.8;
+    }
+
+    .event-value {
+      font-weight: 500;
+    }
+
+    /* Panel derecho: tarjeta de invitación */
+    .preview-panel {
+      background: var(--card-solid-bg);
+      border-radius: var(--radius-xl);
+      padding: 18px 16px 16px 16px;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.45);
+      position: relative;
+      overflow: hidden;
+      color: #111827;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 260px;
+    }
+
+    @media (min-width: 900px) {
+      .preview-panel {
+        padding: 24px 22px 20px 22px;
+      }
+    }
+
+    .preview-bg-ribbon {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top left, rgba(230, 57, 70, 0.18), transparent 55%),
+                  radial-gradient(circle at bottom right, rgba(42, 157, 143, 0.18), transparent 55%);
+      pointer-events: none;
+      opacity: 0.9;
+    }
+
+    .preview-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .invitation-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .invitation-title-block {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .invitation-title {
+      font-size: 1.05rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .invitation-title span {
+      font-size: 1.4rem;
+    }
+
+    .invitation-tagline {
+      font-size: 0.8rem;
+      color: #4b5563;
+    }
+
+    .invitation-stamp {
+      padding: 4px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.8);
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: #4b5563;
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(4px);
+    }
+
+    .invitation-body {
+      background: rgba(255, 255, 255, 0.85);
+      border-radius: 16px;
+      padding: 14px 13px;
+      font-size: 0.86rem;
+      line-height: 1.6;
+      color: #111827;
+      border: 1px solid rgba(209, 213, 219, 0.8);
+      white-space: pre-wrap;
+      min-height: 140px;
+    }
+
+    @media (min-width: 900px) {
+      .invitation-body {
+        padding: 16px 15px;
+      }
+    }
+
+    .invitation-placeholder {
+      color: #9ca3af;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      height: 100%;
+      font-size: 0.85rem;
+    }
+
+    .invitation-footer {
+      margin-top: 12px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .footer-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .btn-secondary {
+      background: #111827;
+      color: #f9fafb;
+      border-radius: 999px;
+      padding: 8px 14px;
+      border: 1px solid rgba(15,23,42,0.9);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      transition: background var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast), opacity var(--transition-fast);
+    }
+
+    .btn-secondary:hover:not(:disabled) {
+      background: #020617;
+      transform: translateY(-1px);
+      box-shadow: 0 8px 18px rgba(15,23,42,0.5);
+    }
+
+    .btn-secondary:disabled {
+      opacity: 0.55;
+      cursor: default;
+      box-shadow: none;
+      transform: none;
+    }
+
+    .whatsapp-btn {
+      background: #22c55e;
+      border-color: #15803d;
+    }
+
+    .whatsapp-btn:hover:not(:disabled) {
+      background: #16a34a;
+    }
+
+    .regenerate-btn {
+      background: #e5e7eb;
+      color: #111827;
+      border-color: #d1d5db;
+    }
+
+    .regenerate-btn:hover:not(:disabled) {
+      background: #d1d5db;
+    }
+
+    .small-note {
+      font-size: 0.72rem;
+      color: #6b7280;
+    }
+
+    @media (max-width: 599px) {
+      body {
+        padding: 16px;
+      }
+      .app-shell {
+        border-radius: 20px;
+        padding: 18px 16px;
+      }
+      .header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <div class="header">
+      <div class="title-block">
+        <div class="app-title">
+          <span class="emoji">🎄</span>
+          <span>Christmas Invitation Generator</span>
+        </div>
+        <p class="app-subtitle">
+          Crea mensajes personalizados para invitar a tu equipo a la celebración navideña en <strong>Historias y un café</strong>, en cuestión de segundos.
+        </p>
+      </div>
+      <div class="badge">
+        <span class="badge-dot"></span>
+        <span>Modo Navidad activo</span>
+      </div>
+    </div>
+
+    <div class="layout">
+      <!-- Panel de entrada -->
+      <section class="panel">
+        <div class="panel-header">
+          <div class="panel-icon">✨</div>
+          <div>
+            <div class="panel-title">Datos de la invitación</div>
+            <div class="panel-subtitle">Solo necesitas el nombre de la persona. El resto ya está listo. 🎁</div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="nombre" class="form-label">Nombre del integrante del equipo</label>
+          <input
+            type="text"
+            id="nombre"
+            class="form-input"
+            placeholder="Ej. Ana, Luis, Equipo de Cocina, etc."
+          />
+          <p id="errorNombre" class="error-text">Por favor, escribe al menos un nombre para personalizar la invitación.</p>
+          <p class="helper-text">
+            Puedes usar solo el primer nombre, un apodo cariñoso o incluso el nombre del equipo.
+          </p>
+        </div>
+
+        <div class="btn-row">
+          <button id="btnGenerar" class="btn btn-primary">
+            <span id="btnGenerarSpinner" class="spinner" style="display:none;"></span>
+            <span id="btnGenerarText">Generar invitación</span>
+          </button>
+        </div>
+
+        <div class="event-info">
+          <div class="event-info-title">
+            <span>🕯️</span>
+            <span>Detalles del evento (ya incluidos en el mensaje)</span>
+          </div>
+          <div class="event-line">
+            <span class="event-label">Evento:</span>
+            <span class="event-value">Celebración navideña "Dando gracias por lo recibido"</span>
+          </div>
+          <div class="event-line">
+            <span class="event-label">Lugar:</span>
+            <span class="event-value">Historias y un café</span>
+          </div>
+          <div class="event-line">
+            <span class="event-label">Fecha:</span>
+            <span class="event-value">Domingo 14 Dic 2025</span>
+          </div>
+          <div class="event-line">
+            <span class="event-label">Hora:</span>
+            <span class="event-value">Desde las 6:00 p.m.</span>
+          </div>
+	  <div class="event-line">
+            <span class="event-label">Hasta:</span>
+            <span class="event-value">¡Cuando salga el sol! 🌞</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Panel de invitación generada -->
+      <section class="preview-panel">
+        <div class="preview-bg-ribbon"></div>
+        <div class="preview-content">
+          <div class="invitation-header">
+            <div class="invitation-title-block">
+              <div class="invitation-title">
+                <span>🎁</span>
+                <span>Tu invitación personalizada</span>
+              </div>
+              <div class="invitation-tagline">
+                El texto ya está listo para copiar o enviar directo por WhatsApp.
+              </div>
+            </div>
+            <div class="invitation-stamp">
+              Edición especial · 2025
+            </div>
+          </div>
+
+          <div id="invitationBody" class="invitation-body">
+            <div class="invitation-placeholder">
+              Aquí aparecerá el mensaje navideño. Escribe un nombre y presiona “Generar invitación” para comenzar. 🎄
+            </div>
+          </div>
+        </div>
+
+        <div class="invitation-footer">
+          <div class="footer-actions">
+            <button id="btnRegenerar" class="btn-secondary regenerate-btn" disabled>
+              <span class="btn-icon">🔁</span>
+              <span id="btnRegenerarText">Regenerar mensaje</span>
+            </button>
+
+            <button id="btnWhatsApp" class="btn-secondary whatsapp-btn" disabled>
+              <span class="btn-icon">💬</span>
+              <span>Enviar por WhatsApp</span>
+            </button>
+          </div>
+          <div class="small-note">
+            Tip: puedes editar el texto a mano luego de pegarlo en WhatsApp si quieres afinar algún detalle. ✍️
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    const nombreInput = document.getElementById('nombre');
+    const errorNombre = document.getElementById('errorNombre');
+
+    const btnGenerar = document.getElementById('btnGenerar');
+    const btnGenerarSpinner = document.getElementById('btnGenerarSpinner');
+    const btnGenerarText = document.getElementById('btnGenerarText');
+
+    const btnRegenerar = document.getElementById('btnRegenerar');
+    const btnRegenerarText = document.getElementById('btnRegenerarText');
+    const btnWhatsApp = document.getElementById('btnWhatsApp');
+
+    const invitationBody = document.getElementById('invitationBody');
+
+    let currentMessage = '';
+
+    function limpiarErrores() {
+      errorNombre.classList.remove('visible');
+    }
+
+    function setInvitationMessage(message) {
+      currentMessage = message;
+
+      invitationBody.innerHTML = '';
+      const textNode = document.createTextNode(message);
+      invitationBody.appendChild(textNode);
+
+      btnRegenerar.disabled = false;
+      btnWhatsApp.disabled = false;
+    }
+
+    function getRandomTemplate(nombre) {
+      const name = nombre.trim();
+
+     const baseDetails =
+  '🎄 Celebración navideña "Dando gracias por lo recibido"\n\n' +
+  '🏠 Lugar: Historias y un café\n' +
+  '📆 Día: Domingo 14 Dic 2025\n' +
+  '⏰ Horario: Desde las 6:00 p.m.\n' +
+  '🌅 Hasta: ¡Cuando salga el sol! 🌞\n';
+
+
+      const templates = [
+        (n) =>
+          `Hola ${n} ✨\n\n` +
+          `Quiero invitarte a nuestra\n${baseDetails}\n` +
+          `Será una noche para dar gracias por todo lo recibido, celebrar lo vivido en equipo y recargar energías para lo que viene.\n\n` +
+          `Nos hará mucha ilusión contar contigo. ¿Te apuntas? 💫`,
+
+        (n) =>
+          `${n}, esta invitación es para ti 🎁\n\n` +
+          `Estamos preparando una velada especial en nuestra\n${baseDetails}\n` +
+          `Habrá buena comida, risas, momentos para agradecer y, sobre todo, tiempo para conectar como equipo.\n\n` +
+          `Tu presencia hace la diferencia. ¡Te esperamos con cariño! 🤍`,
+
+        (n) =>
+          `¡Hey ${n}! 🌟\n\n` +
+          `Queremos cerrar el año como se merece: juntos, agradecidos y celebrando en nuestra\n${baseDetails}\n` +
+          `Será un espacio para recordar lo que hemos logrado, compartir historias y brindar por todo lo bueno que viene.\n\n` +
+          `No faltes, nos encantaría verte allí. 🥂`,
+
+        (n) =>
+          `Querid@ ${n} 🎄\n\n` +
+          `Estás cordialmente invitad@ a nuestra\n${baseDetails}\n` +
+          `Esta noche será un agradecimiento vivo por todo lo que hemos construido como equipo: esfuerzo, apoyo y muchas sonrisas compartidas.\n\n` +
+          `Ven cómodo, con espíritu navideño y muchas ganas de disfrutar. 🎅✨`
+      ];
+
+      const index = Math.floor(Math.random() * templates.length);
+      return templates[index](name || 'equipo');
+    }
+
+    function startLoadingGenerate() {
+      btnGenerar.disabled = true;
+      btnGenerarSpinner.style.display = 'inline-block';
+      btnGenerarText.textContent = 'Generando...';
+    }
+
+    function stopLoadingGenerate() {
+      btnGenerar.disabled = false;
+      btnGenerarSpinner.style.display = 'none';
+      btnGenerarText.textContent = 'Generar invitación';
+    }
+
+    function startLoadingRegenerate() {
+      btnRegenerar.disabled = true;
+      btnRegenerarText.textContent = 'Regenerando...';
+    }
+
+    function stopLoadingRegenerate() {
+      btnRegenerar.disabled = false;
+      btnRegenerarText.textContent = 'Regenerar mensaje';
+    }
+
+    btnGenerar.addEventListener('click', () => {
+      limpiarErrores();
+
+      const nombre = nombreInput.value.trim();
+      if (!nombre) {
+        errorNombre.classList.add('visible');
+        nombreInput.focus();
+        return;
+      }
+
+      startLoadingGenerate();
+
+      setTimeout(() => {
+        const message = getRandomTemplate(nombre);
+        setInvitationMessage(message);
+        stopLoadingGenerate();
+      }, 650); // pequeño delay para que se vea el "loading"
+    });
+
+    btnRegenerar.addEventListener('click', () => {
+      const nombre = nombreInput.value.trim();
+      if (!nombre) {
+        // Si por alguna razón borran el nombre luego de generar:
+        errorNombre.classList.add('visible');
+        nombreInput.focus();
+        return;
+      }
+
+      startLoadingRegenerate();
+
+      setTimeout(() => {
+        const message = getRandomTemplate(nombre);
+        setInvitationMessage(message);
+        stopLoadingRegenerate();
+      }, 550);
+    });
+
+    btnWhatsApp.addEventListener('click', () => {
+      if (!currentMessage) return;
+
+      const url = 'https://wa.me/?text=' + encodeURIComponent(currentMessage);
+      window.open(url, '_blank');
+    });
+
+    nombreInput.addEventListener('input', () => {
+      if (nombreInput.value.trim()) {
+        limpiarErrores();
+      }
+    });
+  </script>
+</body>
+</html>
