@@ -326,7 +326,7 @@
     }
 
     .event-label {
-      width: 70px;
+      width: 80px;
       opacity: 0.8;
     }
 
@@ -492,16 +492,6 @@
       background: #16a34a;
     }
 
-    .regenerate-btn {
-      background: #e5e7eb;
-      color: #111827;
-      border-color: #d1d5db;
-    }
-
-    .regenerate-btn:hover:not(:disabled) {
-      background: #d1d5db;
-    }
-
     .small-note {
       font-size: 0.72rem;
       color: #6b7280;
@@ -578,23 +568,19 @@
             <span>Detalles del evento (ya incluidos en el mensaje)</span>
           </div>
           <div class="event-line">
-            <span class="event-label">Evento:</span>
-            <span class="event-value">Celebración navideña "Dando gracias por lo recibido"</span>
-          </div>
-          <div class="event-line">
-            <span class="event-label">Lugar:</span>
+            <span class="event-label">🏠 Lugar:</span>
             <span class="event-value">Historias y un café</span>
           </div>
           <div class="event-line">
-            <span class="event-label">Fecha:</span>
+            <span class="event-label">📆 Día:</span>
             <span class="event-value">Domingo 14 Dic 2025</span>
           </div>
           <div class="event-line">
-            <span class="event-label">Hora:</span>
+            <span class="event-label">⏰ Horario:</span>
             <span class="event-value">Desde las 6:00 p.m.</span>
           </div>
-	  <div class="event-line">
-            <span class="event-label">Hasta:</span>
+          <div class="event-line">
+            <span class="event-label">🌅 Hasta:</span>
             <span class="event-value">¡Cuando salga el sol! 🌞</span>
           </div>
         </div>
@@ -628,11 +614,6 @@
 
         <div class="invitation-footer">
           <div class="footer-actions">
-            <button id="btnRegenerar" class="btn-secondary regenerate-btn" disabled>
-              <span class="btn-icon">🔁</span>
-              <span id="btnRegenerarText">Regenerar mensaje</span>
-            </button>
-
             <button id="btnWhatsApp" class="btn-secondary whatsapp-btn" disabled>
               <span class="btn-icon">💬</span>
               <span>Enviar por WhatsApp</span>
@@ -654,10 +635,7 @@
     const btnGenerarSpinner = document.getElementById('btnGenerarSpinner');
     const btnGenerarText = document.getElementById('btnGenerarText');
 
-    const btnRegenerar = document.getElementById('btnRegenerar');
-    const btnRegenerarText = document.getElementById('btnRegenerarText');
     const btnWhatsApp = document.getElementById('btnWhatsApp');
-
     const invitationBody = document.getElementById('invitationBody');
 
     let currentMessage = '';
@@ -673,49 +651,28 @@
       const textNode = document.createTextNode(message);
       invitationBody.appendChild(textNode);
 
-      btnRegenerar.disabled = false;
       btnWhatsApp.disabled = false;
     }
 
-    function getRandomTemplate(nombre) {
-      const name = nombre.trim();
+    // Mensaje fijo, solo cambia el nombre
+    function buildInvitation(nombre) {
+      const n = (nombre || '').trim() || 'equipo';
 
-     const baseDetails =
-  '🎄 Celebración navideña "Dando gracias por lo recibido"\n\n' +
-  '🏠 Lugar: Historias y un café\n' +
-  '📆 Día: Domingo 14 Dic 2025\n' +
-  '⏰ Horario: Desde las 6:00 p.m.\n' +
-  '🌅 Hasta: ¡Cuando salga el sol! 🌞\n';
+      const baseDetails =
+        '🎄 Celebración navideña "Dando gracias por lo recibido"\n\n' +
+        '🏠 Lugar: Historias y un café\n' +
+        '📆 Día: Domingo 14 Dic 2025\n' +
+        '⏰ Horario: Desde las 6:00 p.m.\n' +
+        '🌅 Hasta: ¡Cuando salga el sol! 🌞\n\n';
 
+      const message =
+        `Hola ${n} ✨\n\n` +
+        `Quiero invitarte a nuestra:\n\n` +
+        baseDetails +
+        `Será una noche para dar gracias por lo recibido, celebrar lo que hemos vivido en equipo y recargar energías para lo que viene.\n\n` +
+        `Me hará mucha ilusión contar contigo. ¿Te animas? 💫`;
 
-      const templates = [
-        (n) =>
-          `Hola ${n} ✨\n\n` +
-          `Quiero invitarte a nuestra\n${baseDetails}\n` +
-          `Será una noche para dar gracias por todo lo recibido, celebrar lo vivido en equipo y recargar energías para lo que viene.\n\n` +
-          `Nos hará mucha ilusión contar contigo. ¿Te apuntas? 💫`,
-
-        (n) =>
-          `${n}, esta invitación es para ti 🎁\n\n` +
-          `Estamos preparando una velada especial en nuestra\n${baseDetails}\n` +
-          `Habrá buena comida, risas, momentos para agradecer y, sobre todo, tiempo para conectar como equipo.\n\n` +
-          `Tu presencia hace la diferencia. ¡Te esperamos con cariño! 🤍`,
-
-        (n) =>
-          `¡Hey ${n}! 🌟\n\n` +
-          `Queremos cerrar el año como se merece: juntos, agradecidos y celebrando en nuestra\n${baseDetails}\n` +
-          `Será un espacio para recordar lo que hemos logrado, compartir historias y brindar por todo lo bueno que viene.\n\n` +
-          `No faltes, nos encantaría verte allí. 🥂`,
-
-        (n) =>
-          `Querid@ ${n} 🎄\n\n` +
-          `Estás cordialmente invitad@ a nuestra\n${baseDetails}\n` +
-          `Esta noche será un agradecimiento vivo por todo lo que hemos construido como equipo: esfuerzo, apoyo y muchas sonrisas compartidas.\n\n` +
-          `Ven cómodo, con espíritu navideño y muchas ganas de disfrutar. 🎅✨`
-      ];
-
-      const index = Math.floor(Math.random() * templates.length);
-      return templates[index](name || 'equipo');
+      return message;
     }
 
     function startLoadingGenerate() {
@@ -728,16 +685,6 @@
       btnGenerar.disabled = false;
       btnGenerarSpinner.style.display = 'none';
       btnGenerarText.textContent = 'Generar invitación';
-    }
-
-    function startLoadingRegenerate() {
-      btnRegenerar.disabled = true;
-      btnRegenerarText.textContent = 'Regenerando...';
-    }
-
-    function stopLoadingRegenerate() {
-      btnRegenerar.disabled = false;
-      btnRegenerarText.textContent = 'Regenerar mensaje';
     }
 
     btnGenerar.addEventListener('click', () => {
@@ -753,28 +700,10 @@
       startLoadingGenerate();
 
       setTimeout(() => {
-        const message = getRandomTemplate(nombre);
+        const message = buildInvitation(nombre);
         setInvitationMessage(message);
         stopLoadingGenerate();
-      }, 650); // pequeño delay para que se vea el "loading"
-    });
-
-    btnRegenerar.addEventListener('click', () => {
-      const nombre = nombreInput.value.trim();
-      if (!nombre) {
-        // Si por alguna razón borran el nombre luego de generar:
-        errorNombre.classList.add('visible');
-        nombreInput.focus();
-        return;
-      }
-
-      startLoadingRegenerate();
-
-      setTimeout(() => {
-        const message = getRandomTemplate(nombre);
-        setInvitationMessage(message);
-        stopLoadingRegenerate();
-      }, 550);
+      }, 650);
     });
 
     btnWhatsApp.addEventListener('click', () => {
