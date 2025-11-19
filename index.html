@@ -654,20 +654,22 @@
       btnWhatsApp.disabled = false;
     }
 
-    // Mensaje fijo, solo cambia el nombre
+  // Mensaje fijo, solo cambia el nombre
 function buildInvitation(nombre) {
   const n = (nombre || '').trim() || 'equipo';
-  
-  // Emojis por código Unicode (más robusto)
-  const EMO_TREE   = '\uD83C\uDF84'; // 🎄
-  const EMO_HOUSE  = '\uD83C\uDFE0'; // 🏠
-  const EMO_CAL    = '\uD83D\uDCC6'; // 📆
-  const EMO_CLOCK  = '\u23F0';       // ⏰
+
+  // Emojis como códigos Unicode (evita que se dañen)
+  const EMO_TREE    = '\uD83C\uDF84'; // 🎄
+  const EMO_SPARK   = '\u2728';       // ✨
+  const EMO_PARTY   = '\uD83C\uDF89'; // 🎉
+  const EMO_CLINK   = '\uD83E\uDD42'; // 🥂
+  const EMO_SANTA   = '\uD83C\uDF85'; // 🎅
+  const EMO_MUSIC   = '\uD83C\uDFB6'; // 🎶
+  const EMO_HOUSE   = '\uD83C\uDFE0'; // 🏠
+  const EMO_CAL     = '\uD83D\uDCC6'; // 📆
+  const EMO_CLOCK   = '\u23F0';       // ⏰
   const EMO_SUNRISE = '\uD83C\uDF05'; // 🌅
-  const EMO_SUN    = '\u2600\uFE0F'; // ☀️
-  const EMO_SPARK  = '\u2728';       // ✨
-  const EMO_STAR   = '\u2B50';       // ⭐
-  const EMO_COMET  = '\uD83D\uDCAB'; // 💫
+  const EMO_SUN     = '\uD83C\uDF1E'; // 🌞
 
   const baseDetails =
     `${EMO_TREE} Celebración navideña "Dando gracias por lo recibido"\n\n` +
@@ -677,13 +679,13 @@ function buildInvitation(nombre) {
     `${EMO_SUNRISE} Hasta: ¡Cuando salga el sol! ${EMO_SUN}\n\n`;
 
   const message =
-    `Querid@ ${n} ${EMO_SPARK}\n\n` +
+    `Querid@ ${n} ${EMO_TREE}${EMO_SPARK}\n\n` +
     `Estás cordialmente invitad@ a nuestra\n` +
-    `🎉 Gran Celebración Navideña 🥂🎄\n\n` +
+    `${EMO_PARTY} Gran Celebración Navideña ${EMO_CLINK}${EMO_TREE}\n\n` +
     baseDetails +
     `Este será un encuentro para celebrar la vida, las conexiones reales y cada momento que hemos compartido este año. ` +
     `Una noche para agradecer, brindar, reír y disfrutar como familia extendida.\n\n` +
-    `Ven comod@, con tu mejor vibra navideña y dispuesto a celebrar en grande. ${EMO_COMET}\n\n` +
+    `Ven comod@, con tu mejor vibra navideña y dispuesto a celebrar en grande. ${EMO_SANTA}${EMO_MUSIC}${EMO_SPARK}\n\n` +
     `¡Tu presencia hará la diferencia!\n` +
     `Favor confirmar tu asistencia.`;
 
