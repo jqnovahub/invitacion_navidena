@@ -90,7 +90,7 @@
     .app-subtitle {
       font-size: 0.9rem;
       color: var(--text-muted);
-      max-width: 420px;
+      max-width: 460px;
     }
 
     .badge {
@@ -259,20 +259,6 @@
       box-shadow: none;
     }
 
-    .btn-outline {
-      background: transparent;
-      color: var(--accent-gold);
-      border: 1px solid rgba(244, 211, 94, 0.8);
-    }
-
-    .btn-outline:hover:not(:disabled) {
-      background: rgba(17, 24, 39, 0.7);
-    }
-
-    .btn-icon {
-      font-size: 1.1rem;
-    }
-
     .btn-row {
       display: flex;
       flex-wrap: wrap;
@@ -326,7 +312,7 @@
     }
 
     .event-label {
-      width: 80px;
+      width: 90px;
       opacity: 0.8;
     }
 
@@ -521,7 +507,7 @@
           <span>Generador de Invitación Navideña</span>
         </div>
         <p class="app-subtitle">
-          Crea mensajes personalizados para invitar a tu equipo a la celebración navideña en <strong>Historias y un café</strong>, en cuestión de segundos.
+          Crea mensajes personalizados para invitar a personas especiales de <strong>Historias y un café</strong>: equipo, familiares, amigos y clientes.
         </p>
       </div>
       <div class="badge">
@@ -537,21 +523,35 @@
           <div class="panel-icon">✨</div>
           <div>
             <div class="panel-title">Datos de la invitación</div>
-            <div class="panel-subtitle">Solo necesitas el nombre de la persona. El resto ya está listo. 🎁</div>
+            <div class="panel-subtitle">Solo necesitas el nombre y el número de WhatsApp. El resto ya está listo. 🎁</div>
           </div>
         </div>
 
         <div class="form-group">
-          <label for="nombre" class="form-label">Nombre del integrante del equipo</label>
+          <label for="nombre" class="form-label">Nombre de la persona invitada</label>
           <input
             type="text"
             id="nombre"
             class="form-input"
-            placeholder="Ej. Ana, Luis, Equipo de Cocina, etc."
+            placeholder="Ej. Ana, Luis, Equipo de Cocina, Clientes VIP..."
           />
           <p id="errorNombre" class="error-text">Por favor, escribe al menos un nombre para personalizar la invitación.</p>
           <p class="helper-text">
-            Puedes usar solo el primer nombre, un apodo cariñoso o incluso el nombre del equipo.
+            Puede ser el nombre de alguien del equipo, un familiar, un amigo o un cliente especial.
+          </p>
+        </div>
+
+        <div class="form-group">
+          <label for="telefono" class="form-label">Número de WhatsApp</label>
+          <input
+            type="tel"
+            id="telefono"
+            class="form-input"
+            placeholder="Ej. 7875551234 o +1 787 555 1234"
+          />
+          <p id="errorTelefono" class="error-text">Por favor, escribe un número de WhatsApp válido.</p>
+          <p class="helper-text">
+            Puedes escribirlo con o sin +1, con espacios o guiones. La app lo formatea automáticamente.
           </p>
         </div>
 
@@ -607,7 +607,7 @@
 
           <div id="invitationBody" class="invitation-body">
             <div class="invitation-placeholder">
-              Aquí aparecerá el mensaje navideño. Escribe un nombre y presiona “Generar invitación” para comenzar. 🎄
+              Aquí aparecerá el mensaje navideño. Escribe el nombre y el número de WhatsApp, luego presiona “Generar invitación”. 🎄
             </div>
           </div>
         </div>
@@ -629,7 +629,10 @@
 
   <script>
     const nombreInput = document.getElementById('nombre');
+    const telefonoInput = document.getElementById('telefono');
+
     const errorNombre = document.getElementById('errorNombre');
+    const errorTelefono = document.getElementById('errorTelefono');
 
     const btnGenerar = document.getElementById('btnGenerar');
     const btnGenerarSpinner = document.getElementById('btnGenerarSpinner');
@@ -642,6 +645,7 @@
 
     function limpiarErrores() {
       errorNombre.classList.remove('visible');
+      errorTelefono.classList.remove('visible');
     }
 
     function setInvitationMessage(message) {
@@ -654,43 +658,43 @@
       btnWhatsApp.disabled = false;
     }
 
-  // Mensaje fijo, solo cambia el nombre
-function buildInvitation(nombre) {
-  const n = (nombre || '').trim() || 'equipo';
+    // Mensaje fijo, solo cambia el nombre
+    function buildInvitation(nombre) {
+      const n = (nombre || '').trim() || 'equipo';
 
-  // Emojis como códigos Unicode (evita que se dañen)
-  const EMO_TREE    = '\uD83C\uDF84'; // 🎄
-  const EMO_SPARK   = '\u2728';       // ✨
-  const EMO_PARTY   = '\uD83C\uDF89'; // 🎉
-  const EMO_CLINK   = '\uD83E\uDD42'; // 🥂
-  const EMO_SANTA   = '\uD83C\uDF85'; // 🎅
-  const EMO_MUSIC   = '\uD83C\uDFB6'; // 🎶
-  const EMO_HOUSE   = '\uD83C\uDFE0'; // 🏠
-  const EMO_CAL     = '\uD83D\uDCC6'; // 📆
-  const EMO_CLOCK   = '\u23F0';       // ⏰
-  const EMO_SUNRISE = '\uD83C\uDF05'; // 🌅
-  const EMO_SUN     = '\uD83C\uDF1E'; // 🌞
+      // Emojis como códigos Unicode
+      const EMO_TREE    = '\uD83C\uDF84'; // 🎄
+      const EMO_SPARK   = '\u2728';       // ✨
+      const EMO_PARTY   = '\uD83C\uDF89'; // 🎉
+      const EMO_CLINK   = '\uD83E\uDD42'; // 🥂
+      const EMO_SANTA   = '\uD83C\uDF85'; // 🎅
+      const EMO_MUSIC   = '\uD83C\uDFB6'; // 🎶
+      const EMO_HOUSE   = '\uD83C\uDFE0'; // 🏠
+      const EMO_CAL     = '\uD83D\uDCC6'; // 📆
+      const EMO_CLOCK   = '\u23F0';       // ⏰
+      const EMO_SUNRISE = '\uD83C\uDF05'; // 🌅
+      const EMO_SUN     = '\uD83C\uDF1E'; // 🌞
 
-  const baseDetails =
-    `${EMO_TREE} Celebración navideña "Dando gracias por lo recibido"\n\n` +
-    `${EMO_HOUSE} Lugar: Historias y un café\n` +
-    `${EMO_CAL} Día: Domingo 14 Dic 2025\n` +
-    `${EMO_CLOCK} Horario: Desde las 6:00 p.m.\n` +
-    `${EMO_SUNRISE} Hasta: ¡Cuando salga el sol! ${EMO_SUN}\n\n`;
+      const baseDetails =
+        `${EMO_TREE} Celebración navideña "Dando gracias por lo recibido"\n\n` +
+        `${EMO_HOUSE} Lugar: Historias y un café\n` +
+        `${EMO_CAL} Día: Domingo 14 Dic 2025\n` +
+        `${EMO_CLOCK} Horario: Desde las 6:00 p.m.\n` +
+        `${EMO_SUNRISE} Hasta: ¡Cuando salga el sol! ${EMO_SUN}\n\n`;
 
-  const message =
-    `Querid@ ${n} ${EMO_TREE}${EMO_SPARK}\n\n` +
-    `Estás cordialmente invitad@ a nuestra\n` +
-    `${EMO_PARTY} Gran Celebración Navideña ${EMO_CLINK}${EMO_TREE}\n\n` +
-    baseDetails +
-    `Este será un encuentro para celebrar la vida, las conexiones reales y cada momento que hemos compartido este año. ` +
-    `Una noche para agradecer, brindar, reír y disfrutar como familia extendida.\n\n` +
-    `Ven cómod@, con tu mejor vibra navideña y dispuesto a celebrar en grande. ${EMO_SANTA}${EMO_MUSIC}${EMO_SPARK}\n\n` +
-    `¡Tu presencia hará la diferencia!\n` +
-    `Favor confirmar tu asistencia.`;
+      const message =
+        `Querid@ ${n} ${EMO_TREE}${EMO_SPARK}\n\n` +
+        `Estás cordialmente invitad@ a nuestra\n` +
+        `${EMO_PARTY} Gran Celebración Navideña ${EMO_CLINK}${EMO_TREE}\n\n` +
+        baseDetails +
+        `Este será un encuentro para celebrar la vida, las conexiones reales y cada momento que hemos compartido este año con nuestro equipo, familiares, amigos y clientes. ` +
+        `Una noche para agradecer, brindar, reír y disfrutar como familia extendida.\n\n` +
+        `Ven comod@, con tu mejor vibra navideña y dispuesto a celebrar en grande. ${EMO_SANTA}${EMO_MUSIC}${EMO_SPARK}\n\n` +
+        `¡Tu presencia hará la diferencia!\n` +
+        `Favor confirmar tu asistencia.`;
 
-  return message;
-}
+      return message;
+    }
 
     function startLoadingGenerate() {
       btnGenerar.disabled = true;
@@ -704,13 +708,54 @@ function buildInvitation(nombre) {
       btnGenerarText.textContent = 'Generar invitación';
     }
 
+    // Normaliza el teléfono para wa.me
+    function normalizarTelefono(raw) {
+      const digits = (raw || '').replace(/\D/g, '');
+      if (!digits) return '';
+
+      // Si tiene 10 dígitos, asumimos EEUU / Puerto Rico y anteponemos 1
+      if (digits.length === 10) {
+        return '1' + digits;
+      }
+
+      // Si tiene 11 y empieza en 1, lo usamos tal cual
+      if (digits.length === 11 && digits.startsWith('1')) {
+        return digits;
+      }
+
+      // Caso genérico: devolvemos lo que haya si al menos parece un número razonable
+      if (digits.length >= 8) {
+        return digits;
+      }
+
+      return '';
+    }
+
     btnGenerar.addEventListener('click', () => {
       limpiarErrores();
 
       const nombre = nombreInput.value.trim();
+      const telefono = telefonoInput.value.trim();
+
+      let hayError = false;
+
       if (!nombre) {
         errorNombre.classList.add('visible');
-        nombreInput.focus();
+        hayError = true;
+      }
+
+      const telefonoNormalizado = normalizarTelefono(telefono);
+      if (!telefonoNormalizado) {
+        errorTelefono.classList.add('visible');
+        hayError = true;
+      }
+
+      if (hayError) {
+        if (!nombre) {
+          nombreInput.focus();
+        } else if (!telefonoNormalizado) {
+          telefonoInput.focus();
+        }
         return;
       }
 
@@ -724,15 +769,31 @@ function buildInvitation(nombre) {
     });
 
     btnWhatsApp.addEventListener('click', () => {
+      limpiarErrores();
       if (!currentMessage) return;
 
-      const url = 'https://wa.me/?text=' + encodeURIComponent(currentMessage);
+      const telefono = telefonoInput.value.trim();
+      const telefonoNormalizado = normalizarTelefono(telefono);
+
+      if (!telefonoNormalizado) {
+        errorTelefono.classList.add('visible');
+        telefonoInput.focus();
+        return;
+      }
+
+      const url = 'https://wa.me/' + telefonoNormalizado + '?text=' + encodeURIComponent(currentMessage);
       window.open(url, '_blank');
     });
 
     nombreInput.addEventListener('input', () => {
       if (nombreInput.value.trim()) {
-        limpiarErrores();
+        errorNombre.classList.remove('visible');
+      }
+    });
+
+    telefonoInput.addEventListener('input', () => {
+      if (telefonoInput.value.trim()) {
+        errorTelefono.classList.remove('visible');
       }
     });
   </script>
